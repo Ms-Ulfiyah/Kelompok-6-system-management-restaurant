@@ -59,7 +59,6 @@ bool loginUser(const string& registrasinama, const string& registrasipassword) {
     }
 }
 
-
 void tampilkan_menu(const vector<string>& daftar_menu, const vector<int>& harga_menu) {
     // Hitung panjang maksimum nama menu
     size_t max_length = 0;
@@ -78,43 +77,54 @@ void tampilkan_menu(const vector<string>& daftar_menu, const vector<int>& harga_
     cout << "=======================================\n";
 }
 
-int pilih_menu(const vector<string>& daftar_menu, const vector<int>& harga_menu) {
-    tampilkan_menu(daftar_menu, harga_menu);
 
-    int pilihan;
-    cout << "\nPilih menu berdasarkan nomor: ";
-    cin >> pilihan;
+int pilih_menu(const vector<string>& daftar_menu, const vector<int>& harga_menu, string& nama_menu, int& jumlah_pesanan) {
+    while (true) {
+        tampilkan_menu(daftar_menu, harga_menu);
 
-    if (pilihan < 1 || pilihan > static_cast<int>(daftar_menu.size())) {
-        cout << "Menu yang dipilih tidak valid.\n";
-        return -1;
+        int pilihan;
+        cout << "\nPilih menu berdasarkan nomor: ";
+        cin >> pilihan;
+
+        if (pilihan < 1 || pilihan > static_cast<int>(daftar_menu.size())) {
+            system("cls");
+            cout << "Nomor menu yang dipilih tidak valid. Silakan pilih ulang.\n";
+            continue;
+        }
+
+        cout << "Jumlah yang ingin dipesan: ";
+        cin >> jumlah_pesanan;
+
+        if (jumlah_pesanan <= 0) {
+            system("cls");
+            cout << "Jumlah tidak boleh kurang dari 1. Silakan pesan ulang.\n";
+            continue;
+        }
+
+        nama_menu = daftar_menu[pilihan - 1];
+        int total_harga = jumlah_pesanan * harga_menu[pilihan - 1];
+        cout << "Anda memesan " << jumlah_pesanan << " " << nama_menu
+            << " dengan total harga Rp " << total_harga << "\n";
+
+        return total_harga;
     }
-
-    int jumlah;
-    cout << "Jumlah yang ingin dipesan: ";
-    cin >> jumlah;
-
-    int total_harga = jumlah * harga_menu[pilihan - 1];
-    cout << "Anda memesan " << jumlah << " " << daftar_menu[pilihan - 1] << " dengan total harga Rp " << total_harga << "\n";
-
-    return total_harga;
 }
 
 void mp() {
 
 metode_mp:
-    cout << " \n Pilih metode pembayaran : \n";
+    cout << "\nPilih metode pembayaran : \n";
     cout << " 1. Credit card \n";
     cout << " 2. Debit card \n";
     cout << " 3. E-money \n";
     int pilih_mp;
-    cout << " \n Anda memiilih : "; cin >> pilih_mp;
+    cout << "Anda memiilih : "; cin >> pilih_mp;
     system("cls");
 
     // credit card 
     if (pilih_mp == 1) {
 
-        credit_card:
+    credit_card:
         int Cc;
         cout << " Credit card : \n";
         cout << " 1. Visa \n";
@@ -123,20 +133,20 @@ metode_mp:
 
         if (Cc == 1) {
             int id = 5616161;
-            cout << " VISA : \n" << id;
-            cout << " - Pastikan nominal pembayaran sesuai sebelum menyelesaikan transaksi \n";
+            cout << "\nVISA : " << id;
+            cout << "\n - Pastikan nominal pembayaran sesuai sebelum menyelesaikan transaksi \n";
             cout << " - Jika terjadi masalah, segera laporkan di 04040 \n";
             cout << " - Semua pembayaran tidak dapat dikembalikan kecuali ada kesalahan yang diakui oleh restoran \n";
         }
-        else if(Cc==2){
+        else if (Cc == 2) {
             int id = 4345252;
-            cout << " MASTERCARD : \n" << id;
-            cout << " - Pastikan nominal pembayaran sesuai sebelum menyelesaikan transaksi \n";
+            cout << "\nMASTERCARD : " << id;
+            cout << "\n - Pastikan nominal pembayaran sesuai sebelum menyelesaikan transaksi \n";
             cout << " - Jika terjadi masalah, segera laporkan di 04040 \n";
             cout << " - Semua pembayaran tidak dapat dikembalikan kecuali ada kesalahan yang diakui oleh restoran \n";
         }
         else {
-            gantiCc:
+        gantiCc:
             int gmCc; // ganti metode pembayaran credit card
             cout << " maaf pilihan credit card tidak valid ganti metode pembayaran atau menggunakan kartu credit yang lain\n";
             cout << " 1.ganti metode pembayaran \n";
@@ -146,19 +156,17 @@ metode_mp:
             case 1:
                 goto metode_mp; break;
             case 2:goto credit_card; break;
-            default: cout << " mohon pilih dengan benar ^^ \n"; 
+            default: cout << " mohon pilih dengan benar ^^ \n";
                 goto gantiCc;
                 system("cls");
             }
             cout << endl;
         }
-
-
     }
 
     //debit
     else if (pilih_mp == 2) {
-       debit: 
+    debit:
         int dc;
         cout << " Debit card : \n";
         cout << " 1. MANDIRI \n";
@@ -175,7 +183,7 @@ metode_mp:
             cout << " - Semua pembayaran tidak dapat dikembalikan kecuali ada kesalahan yang diakui oleh restoran \n";
 
         }
-        else if(dc==2){
+        else if (dc == 2) {
             int id = 782737;
             cout << "\n BRI " << id;
             cout << "\n - Pastikan nominal pembayaran sesuai sebelum menyelesaikan transaksi \n";
@@ -197,7 +205,7 @@ metode_mp:
             cout << " - Semua pembayaran tidak dapat dikembalikan kecuali ada kesalahan yang diakui oleh restoran \n";
         }
         else {
-            gantiDc:
+        gantiDc:
             int gmDc;//ganti metode debit card
             cout << " maaf pilihan bank Debit card tidak valid silahkan ganti metode atau menggunakan bank lain \n";
             cout << " 1. ganti metode \n";
@@ -220,7 +228,7 @@ metode_mp:
     //e-money
     else if (pilih_mp == 3) {
 
-    e_money: 
+    e_money:
         int ey;
         cout << " E-money \n";
         cout << " 1. Gopay \n";
@@ -316,9 +324,6 @@ metode_mp:
 
     }
     cout << endl;
-
-
-
 }
 
 void pesan_menu() {
@@ -327,6 +332,10 @@ void pesan_menu() {
         int jumlah;
         int harga_total;
     };
+    int  tbaw{}, tbak, td;
+    string tp, tb;
+    int diskon = 0;
+
 
     vector<Pesanan> daftar_pesanan;
 
@@ -342,7 +351,7 @@ void pesan_menu() {
         "Gado-Gado",
         "Bakso Kuah"
     };
-    vector<int> harga_makanan = { 50000, 60000, 65000, 90000, 70000, 90000, 80000, 90000, 50000, 50000 };
+    vector<int> harga_makanan = { 22000, 21000, 22000, 50000, 25000, 25000, 50000, 25000, 50000, 20000 };
 
     vector<string> minuman = {
         "Es Teh Manis",
@@ -351,12 +360,12 @@ void pesan_menu() {
         "Es Cendol",
         "Es Soda Gembira"
     };
-    vector<int> harga_minuman = { 20000, 20000, 25000, 35000, 30000 };
+    vector<int> harga_minuman = { 8000, 13000, 15000, 13000, 11000 };
 
     int total_harga = 0;
     char ulang;
 
-   
+
 
     do {
         cout << "\n=== Kategori Menu ===\n";
@@ -368,28 +377,23 @@ void pesan_menu() {
         system("cls");
 
         int total_item_harga = 0;
+        string nama_menu;
+        int jumlah_pesanan;
+
         switch (kategori) {
         case 1:
-            total_item_harga = pilih_menu(makanan, harga_makanan);
-            if (total_item_harga != -1) {
-                daftar_pesanan.push_back({ makanan[total_item_harga / harga_makanan[0] - 1],
-                                           total_item_harga / harga_makanan[0],
-                                           total_item_harga });
-            }
+            total_item_harga = pilih_menu(makanan, harga_makanan, nama_menu, jumlah_pesanan);
+            daftar_pesanan.push_back({ nama_menu, jumlah_pesanan, total_item_harga });
             break;
         case 2:
-            total_item_harga = pilih_menu(minuman, harga_minuman);
-            if (total_item_harga != -1) {
-                daftar_pesanan.push_back({ minuman[total_item_harga / harga_minuman[0] - 1],
-                                           total_item_harga / harga_minuman[0],
-                                           total_item_harga });
-            }
+            total_item_harga = pilih_menu(minuman, harga_minuman, nama_menu, jumlah_pesanan);
+            daftar_pesanan.push_back({ nama_menu, jumlah_pesanan, total_item_harga });
             break;
-            
         default:
             cout << "Kategori tidak valid.\n";
             break;
         }
+
 
         total_harga += total_item_harga;
 
@@ -403,14 +407,45 @@ void pesan_menu() {
 
     cout << setw(25) << left << "\nMenu" << setw(10) << "Jumlah" << setw(15) << "Harga Total" << endl;
     cout << "---------------------------------------------------------\n";
-    for (const auto& pesanan : daftar_pesanan  ) {
+    for (const auto& pesanan : daftar_pesanan) {
         cout << setw(25) << left << pesanan.nama_menu << setw(10) << pesanan.jumlah << setw(15) << pesanan.harga_total << "\n";
     }
     cout << "---------------------------------------------------------\n";
     cout << setw(25) << left << "TOTAL" << setw(10) << "" << setw(15) << total_harga << "\n";
     cout << "\n=========================================================\n";
-    cout << " Pembayaran : "; mp();
 
+    tbaw = total_harga;
+    if (total_harga >= 200000) {
+        diskon = 35;
+        td = diskon * total_harga / 100;
+        tbak = total_harga - td;
+
+        cout << "Selamat Anda mendapatkan diskon sebesar " << diskon << " %\n";
+        cout << "Tagihan Anda sekarang adalah = " << tbak << endl;
+    }
+    else if (total_harga >= 150000) {
+        diskon = 25;
+        td = diskon * total_harga / 100;
+        tbak = total_harga - td;
+
+        cout << "Selamat Anda mendapatkan diskon sebesar " << diskon << " %\n";
+        cout << "Tagihan Anda sekarang adalah = " << tbak << endl;
+    }
+    else if (total_harga >= 100000) {
+        diskon = 10;
+        td = diskon * total_harga / 100;
+        tbak = total_harga - td;
+
+        cout << "Selamat Anda mendapatkan diskon sebesar " << diskon << " %\n";
+        cout << "Tagihan Anda sekarang adalah = " << tbak << endl;
+    }
+    else {
+        cout << "Maaf Anda belum mendapatkan diskon.\n";
+        cout << "Tagihan Anda adalah = " << total_harga << "\n";
+    }
+
+    cout << "\nPembayaran : ";
+    mp();
 }
 
 
@@ -439,7 +474,6 @@ void kritik_dan_saran() {
     }
 }
 
-// Fungsi untuk menampilkan kritik dan saran dari file
 void tampilkan_kritik_dan_saran() {
     ifstream file("kritik_dan_saran.txt");
     if (file.is_open()) {
@@ -455,67 +489,201 @@ void tampilkan_kritik_dan_saran() {
     }
 }
 
+//bagian admin 
+
+void tambah_menu(vector<string>& daftar_menu, vector<int>& harga_menu) {
+    string menu_baru;
+    int harga_baru;
+
+    cout << "\nMasukkan nama menu baru: ";
+    cin.ignore();
+    getline(cin, menu_baru);
+    cout << "Masukkan harga menu baru: ";
+    cin >> harga_baru;
+
+    daftar_menu.push_back(menu_baru);
+    harga_menu.push_back(harga_baru);
+
+    cout << "Menu baru telah ditambahkan!\n";
+}
+
+void hapus_menu(vector<string>& daftar_menu, vector<int>& harga_menu) {
+    int index;
+    cout << "\nMenu yang tersedia:\n";
+    for (size_t i = 0; i < daftar_menu.size(); ++i) {
+        cout << "[" << i + 1 << "] " << daftar_menu[i] << " = Rp " << harga_menu[i] << "\n";
+    }
+    cout << "Masukkan nomor menu yang ingin dihapus: ";
+    cin >> index;
+
+    if (index >= 1 && index <= daftar_menu.size()) {
+        daftar_menu.erase(daftar_menu.begin() + index - 1);
+        harga_menu.erase(harga_menu.begin() + index - 1);
+        cout << "Menu berhasil dihapus.\n";
+    }
+    else {
+        cout << "Menu yang dipilih tidak valid.\n";
+    }
+}
+
+void lihat_pesanan(const vector<vector<string>>& pesanan) {
+    cout << "\n==================== Daftar Pesanan ====================\n";
+    for (size_t i = 0; i < pesanan.size(); ++i) {
+        cout << "Pesanan " << i + 1 << ": ";
+        for (const auto& item : pesanan[i]) {
+            cout << item << " ";
+        }
+        cout << "\n";
+    }
+    cout << "=========================================================\n";
+}
+
+void lihat_pendapatan(const vector<int>& total_harga_pesanan) {
+    int total_pendapatan = 0;
+    for (int harga : total_harga_pesanan) {
+        total_pendapatan += harga;
+    }
+    cout << "\nTotal Pendapatan Hari Ini: Rp " << total_pendapatan << "\n";
+}
+
+void menu_pegawai() {
+    vector<string> makanan = {
+        "Nasi Goreng Spesial", "Mie Goreng Seafood", "Ayam Bakar Madu",
+        "Ikan Bakar Sambal Matah", "Sate Ayam", "Sop Buntut", "Rawon Daging",
+        "Rendang Daging", "Gado-Gado", "Bakso Kuah"
+    };
+    vector<int> harga_makanan = { 22000, 21000, 22000, 50000, 25000, 25000, 50000, 25000, 50000, 20000 };
+
+    vector<string> minuman = {
+        "Es Teh Manis", "Es Jeruk", "Es Lemon", "Es Cendol", "Es Soda Gembira"
+    };
+    vector<int> harga_minuman = { 8000, 13000, 15000, 13000, 11000 };
+
+    vector<vector<string>> pesanan;
+    vector<int> total_harga_pesanan;
+    int pilihan;
+
+    do {
+        system("cls");
+        cout << "=== Menu Pegawai ===\n";
+        cout << "1. Tambah Menu\n";
+        cout << "2. Hapus Menu\n";
+        cout << "3. Lihat Pesanan\n";
+        cout << "4. Lihat Statistik Pendapatan\n";
+        cout << "5. Tampilkan Kritik dan Saran\n";
+        cout << "6. Keluar\n";
+        cout << "Pilih opsi: ";
+        cin >> pilihan;
+
+        switch (pilihan) {
+        case 1:
+            tambah_menu(makanan, harga_makanan);
+            break;
+        case 2:
+            hapus_menu(makanan, harga_makanan);
+            break;
+        case 3:
+            lihat_pesanan(pesanan);
+            break;
+        case 4:
+            lihat_pendapatan(total_harga_pesanan);
+            break;
+        case 5:
+            tampilkan_kritik_dan_saran();
+            break;
+        case 6:
+            cout << "Keluar dari menu pegawai.\n";
+            break;
+        default:
+            cout << "Pilihan tidak valid.\n";
+            break;
+        }
+
+        if (pilihan != 6) {
+            cout << "\nTekan ENTER untuk kembali ke menu pegawai...";
+            cin.ignore();
+            cin.get();
+        }
+
+    } while (pilihan != 6);
+}
+
+
+
+
 int main() {
     string nama, password;
-    int opsi;
+    int opsi, pilih, pilihan;
 
-    while (true) {
-        cout << "=== Menu ===" << endl;
-        cout << "1. Registrasi" << endl;
-        cout << "2. Login" << endl;
-        cout << "3. Keluar" << endl;
+    do {
+        system("cls");
+        cout << "=== Aplikasi Restoran ===" << endl;
+        cout << "1. Pelanggan" << endl;
+        cout << "2. Pegawai" << endl;
         cout << "Pilih Opsi: ";
-        cin >> opsi;
+        cin >> pilih;
         system("cls");
 
-        switch (opsi) {
+        switch (pilih) {
         case 1:
-            registerUser(nama, password);
-            break;
-        case 2: {
-            if (loginUser(nama, password)) {
-                int pilihan;
-                do {
-                    cout << "\n=== Menu Pelanggan ===\n";
-                    cout << "1. Pesan Menu\n";
-                    cout << "2. Kritik dan Saran\n";
-                    cout << "3. Tampilkan Kritik dan Saran\n";
-                    cout << "4. Keluar\n";
-                    cout << "Pilih opsi: ";
-                    cin >> pilihan;
-                    system("cls");
+            while (true) {
+                cout << "=== Menu ===" << endl;
+                cout << "1. Registrasi" << endl;
+                cout << "2. Login" << endl;
+                cout << "3. Keluar" << endl;
+                cout << "Pilih Opsi: ";
+                cin >> opsi;
+                system("cls");
 
-                    switch (pilihan) {
-                    case 1:
-                        pesan_menu();
-                        break;
-                    case 2:
-                        kritik_dan_saran();
-                        break;
-                    case 3:
-                        tampilkan_kritik_dan_saran();
-                        break;
-                    case 4:
-                        cout << "Keluar dari menu pelanggan.\n";
-                        break;
-                    default:
-                        cout << "Pilihan tidak valid.\n";
-                    }
+                switch (opsi) {
+                case 1:
+                    registerUser(nama, password);
+                    break;
+                case 2:
+                    if (loginUser(nama, password)) {
+                        int pilihan;
+                        do {
+                            cout << "\n=== Menu Pelanggan ===\n";
+                            cout << "1. Pesan Menu\n";
+                            cout << "2. Kritik dan Saran\n";
+                            cout << "3. Keluar\n";
+                            cout << "Pilih opsi: ";
+                            cin >> pilihan;
+                            system("cls");
 
-                    if (pilihan != 4) {
-                        cout << "\nTekan ENTER untuk kembali ke menu...";
-                        cin.ignore();
-                        cin.get();
+                            switch (pilihan) {
+                            case 1:
+                                pesan_menu();
+                                break;
+                            case 2:
+                                kritik_dan_saran();
+                                break;
+                            case 3:
+                                cout << "Keluar dari menu pelanggan.\n";
+                                return 0;
+                            default:
+                                cout << "Pilihan tidak valid.\n";
+                            }
+                        } while (pilihan != 4);
                     }
-                } while (pilihan != 4);
+                    break;
+                case 3:
+                    cout << "Program keluar. Goodbye!" << endl;
+                    return 0;
+                default:
+                    cout << "Pilihan tidak valid.\n";
+                }
             }
             break;
-        }
-        case 3:
-            cout << "Program keluar. Goodbye!" << endl;
-            return 0;
+
+        case 2:
+            menu_pegawai();
+            break;
+
         default:
-            cout << "Pilihan opsi salah. Silahkan coba lagi.\n" << endl;
+            cout << "Pilihan tidak valid.\n";
         }
-    }
+    } while (pilih != 3);
+
+    return 0;
 }
